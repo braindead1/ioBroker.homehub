@@ -16,18 +16,18 @@
                 "zh-cn": "首次出版"
             }
         },
-        "title": "homehub",
+        "title": "HomeHub",
         "titleLang": {
-            "en": "homehub",
-            "de": "Homehub",
-            "ru": "homehub",
-            "pt": "homehub",
-            "nl": "homehub",
-            "fr": "homehub",
+            "en": "HomeHub",
+            "de": "HomeHub",
+            "ru": "HomeHub",
+            "pt": "HomeHub",
+            "nl": "HomeHub",
+            "fr": "HomeHub",
             "it": "HomeHub",
-            "es": "homehub",
-            "pl": "homehub",
-            "zh-cn": "homehub"
+            "es": "HomeHub",
+            "pl": "HomeHub",
+            "zh-cn": "HomeHub"
         },
         "desc": {
             "en": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
@@ -48,7 +48,8 @@
             "ioBroker",
             "template",
             "Smart Home",
-            "home automation"
+            "home automation",
+            "visualisation"
         ],
         "license": "MIT",
         "platform": "Javascript/Node.js",
@@ -58,22 +59,17 @@
         "extIcon": "https://raw.githubusercontent.com/braindead1/ioBroker.homehub/master/admin/homehub.png",
         "readme": "https://github.com/braindead1/ioBroker.homehub/blob/master/README.md",
         "loglevel": "info",
-        "restartAdapters": [
-            "vis"
-        ],
+        "restartAdapters": [],
         "localLink": "%web_protocol%://%ip%:%web_port%/homehub/index.html",
-        "onlyWWW": true,
-        "noConfig": true,
+        "noConfig": false,
         "singleton": true,
         "type": "visualization",
         "mode": "once",
-        "dependencies": [
-            "vis"
-        ]
+        "dependencies": {
+            "web": ">=1.7.1"
+        }
     },
-    "native": {
-        "option1": "default"
-    },
+    "native": [],
     "objects": [],
     "instanceObjects": []
 }

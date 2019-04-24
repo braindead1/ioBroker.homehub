@@ -11,7 +11,8 @@
     "ioBroker",
     "template",
     "Smart Home",
-    "home automation"
+    "home automation",
+    "visualisation"
   ],
   "repository": {
     "type": "git",
@@ -25,7 +26,7 @@
     "gulp": "^4.0.1",
     "tslint": "^5.16.0"
   },
-  "main": "widgets/homehub.html",
+  "main": "main.js",
   "scripts": {},
   "bugs": {
     "url": "https://github.com/braindead1/ioBroker.homehub/issues"
