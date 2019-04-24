@@ -1,0 +1,79 @@
+{
+    "common": {
+        "name": "homehub",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "homehub",
+        "titleLang": {
+            "en": "homehub",
+            "de": "Homehub",
+            "ru": "homehub",
+            "pt": "homehub",
+            "nl": "homehub",
+            "fr": "homehub",
+            "it": "HomeHub",
+            "es": "homehub",
+            "pl": "homehub",
+            "zh-cn": "homehub"
+        },
+        "desc": {
+            "en": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
+            "de": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
+            "ru": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
+            "pt": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
+            "nl": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
+            "fr": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
+            "it": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
+            "es": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
+            "pl": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
+            "zh-cn": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker."
+        },
+        "authors": [
+            "braindead1"
+        ],
+        "keywords": [
+            "ioBroker",
+            "template",
+            "Smart Home",
+            "home automation"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "homehub.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/braindead1/ioBroker.homehub/master/admin/homehub.png",
+        "readme": "https://github.com/braindead1/ioBroker.homehub/blob/master/README.md",
+        "loglevel": "info",
+        "restartAdapters": [
+            "vis"
+        ],
+        "localLink": "%web_protocol%://%ip%:%web_port%/homehub/index.html",
+        "onlyWWW": true,
+        "noConfig": true,
+        "singleton": true,
+        "type": "visualization",
+        "mode": "once",
+        "dependencies": [
+            "vis"
+        ]
+    },
+    "native": {
+        "option1": "default"
+    },
+    "objects": [],
+    "instanceObjects": []
+}

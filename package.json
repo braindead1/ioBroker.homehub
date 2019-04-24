@@ -1,0 +1,34 @@
+{
+  "name": "iobroker.homehub",
+  "version": "0.0.1",
+  "description": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
+  "author": {
+    "name": "braindead1"
+  },
+  "homepage": "https://github.com/braindead1/ioBroker.homehub",
+  "license": "MIT",
+  "keywords": [
+    "ioBroker",
+    "template",
+    "Smart Home",
+    "home automation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/braindead1/ioBroker.homehub"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/gulp": "^4.0.6",
+    "axios": "^0.18.0",
+    "eslint": "^5.16.0",
+    "gulp": "^4.0.1",
+    "tslint": "^5.16.0"
+  },
+  "main": "widgets/homehub.html",
+  "scripts": {},
+  "bugs": {
+    "url": "https://github.com/braindead1/ioBroker.homehub/issues"
+  },
+  "readmeFilename": "README.md"
+}
