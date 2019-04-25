@@ -61,7 +61,7 @@
         "loglevel": "info",
         "restartAdapters": [],
         "localLink": "%web_protocol%://%ip%:%web_port%/homehub/index.html",
-        "noConfig": false,
+        "materialize": true,
         "singleton": true,
         "type": "visualization",
         "mode": "once",
@@ -69,7 +69,9 @@
             "web": ">=1.7.1"
         }
     },
-    "native": [],
+    "native": {
+        "configuration": ""
+    },
     "objects": [],
     "instanceObjects": []
 }
