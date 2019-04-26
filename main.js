@@ -29,5 +29,5 @@ function main() {
 
     data = data + adapter.config.configuration;
 
-    fs.writeFileSync('/opt/iobroker/iobroker-data/files/homehub/config.js', data);
+    fs.writeFileSync(__dirname + "www/config.js", data);
 }
