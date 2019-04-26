@@ -3,6 +3,18 @@
 
 systemDictionary = {
 
+    'Configuration': {
+        'en': 'Configuration',
+        'de': 'Konfiguration',
+        'ru': 'Configuration',
+        'pt': 'Configuration',
+        'nl': 'Configuration',
+        'fr': 'Configuration',
+        'it': 'Configuration',
+        'es': 'Configuration',
+        'pl': 'Configuration',
+        'zh-cn': 'Configuration'
+    },
     'JSON configuration': {
         'en': 'JSON configuration',
         'de': 'JSON Konfiguration',

@@ -64,7 +64,7 @@
         "materialize": true,
         "singleton": true,
         "type": "visualization",
-        "mode": "once",
+        "mode": "daemon",
         "dependencies": {
             "web": ">=1.7.1"
         }
