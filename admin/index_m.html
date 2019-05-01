@@ -26,6 +26,11 @@
 
         // the function loadSettings has to exist ...
         function load(settings, onChange) {
+            //Hide Settings
+			console.log("Loading settings");
+			$('.hideOnLoad').hide();
+            $('.showOnLoad').show();
+            
             // example: select elements with id=key and class=value and insert value
             if (!settings) return;
 
@@ -48,12 +53,301 @@
             });
             onChange(false);
             M.updateTextFields();  // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
+
+            //Get Subsettings
+			categories = settings.categories || [];
+
+            //Set initial values of further variables
+            subcategoriesSelectedCategory = -1;
+            itemsSelectedCategory = -1;
+            itemsSelectedSubcategory = -1;
+            statesSelectedCategory = -1;
+            statesSelectedSubcategory = -1;
+            statesSelectedItem = -1;
+
+            //++++++++++ TABS ++++++++++
+			//Enhance Tabs with onShow-Function
+			$('ul.tabs li a').on('click', function(){ onTabShow($(this).attr('href'));});
+			function onTabShow(tabId){
+				switch(tabId){
+					case "#tabCategories":
+                        //Fill Table
+                        values2table('tableCategories', categories, onChange);
+                        break;
+                    case "#tabSubcategories":
+                        //Add Categories to Selectbox for Categories
+                        $('#subcategoriesSelectedCategory').empty().append("<option disabled selected value>Select category</option>");
+                        categories.forEach(function(element, index){
+                            $('#subcategoriesSelectedCategory').append("<option value='" + index + "'>" + element.name + "</option>"); 
+                        });
+                        $('select').select();
+            
+	    				//Reset subcategoriesSelectedCategory
+                        subcategoriesSelectedCategory = -1;
+                        $('#divSubcategories').hide();
+			    		break;
+                    case "#tabItems":
+                        //Add Categories to Selectbox for Categories
+                        $('#itemsSelectedCategory').empty().append("<option disabled selected value>Select category</option>");
+                        categories.forEach(function(element, index){
+                            $('#itemsSelectedCategory').append("<option value='" + index + "'>" + element.name + "</option>"); 
+                        });
+                        $('select').select();
+            
+	    				//Reset itemsSelectedCategory
+                        itemsSelectedCategory = -1;
+                        itemsSelectedSubcategory = -1;
+                        $('#divItemsSelectedSubcategory').hide();
+                        $('#divItems').hide();
+			    		break;
+                    case "#tabStates":
+                        //Add Categories to Selectbox for Categories
+                        $('#statesSelectedCategory').empty().append("<option disabled selected value>Select category</option>");
+                        categories.forEach(function(element, index){
+                            $('#statesSelectedCategory').append("<option value='" + index + "'>" + element.name + "</option>"); 
+                        });
+                        $('select').select();
+            
+	    				//Reset itemsSelectedCategory
+                        statesSelectedCategory = -1;
+                        statesSelectedSubcategory = -1;
+                        statesSelectedItem = -1;
+                        $('#divStatesSelectedSubcategory').hide();
+                        $('#divStatesSelectedItem').hide();
+                        $('#divStates').hide();
+			    		break;
+                    case "#tabResult":
+                        //Show resulting JSON
+                        $('#result').empty().html(JSON.stringify(categories, null, 4));
+			    		break;
+				}
+            }
+
+            //++++++++++ SUBCATEGORIES ++++++++++
+			//Enhance subcategoriesSelectedCategory-Selectbox with functions
+			$('#subcategoriesSelectedCategory').on('change', function(){
+                subcategoriesSelectedCategory = $('#subcategoriesSelectedCategory').val();
+
+				if(subcategoriesSelectedCategory > -1){
+                    //Fill Table
+                    if(!categories[subcategoriesSelectedCategory].subcategories) {
+                        categories[subcategoriesSelectedCategory].subcategories = [];
+                    }
+                    values2table('tableSubcategories', categories[subcategoriesSelectedCategory].subcategories, onChange, onTableItemsReady);
+                    
+                    $('#divSubcategories').show();
+				} else {
+                    $('#divSubcategories').hide();
+				}
+            });
+            
+            //++++++++++ ITEMS ++++++++++
+			//Enhance itemsSelectedCategory-Selectbox with functions
+			$('#itemsSelectedCategory').on('change', function(){
+                itemsSelectedCategory = $('#itemsSelectedCategory').val();
+
+				if(itemsSelectedCategory > -1){
+                    //Fill Subcategories
+                    if(!categories[itemsSelectedCategory].subcategories) {
+                        categories[itemsSelectedCategory].subcategories = [];
+                    }
+
+                    if(categories[itemsSelectedCategory].subcategories.length > 0) {
+                        itemsSelectedSubcategory = -1;
+
+                        $('#itemsSelectedSubcategory').empty().append("<option disabled selected value>Select subcategory</option>");
+                        categories[itemsSelectedCategory].subcategories.forEach(function(element, index){
+                            $('#itemsSelectedSubcategory').append("<option value='" + index + "'>" + element.name + "</option>"); 
+                        });
+                        $('select').select();
+
+                        $('#divItemsSelectedSubcategory').show();
+                    } else {
+                        $('#divItemsSelectedSubcategory').hide();
+                    }
+
+                    //Fill Table
+                    if(!categories[itemsSelectedCategory].items) {
+                        categories[itemsSelectedCategory].items = [];
+                    }
+                    values2table('tableItems', categories[itemsSelectedCategory].items, onChange, onTableItemsReady);
+                    
+                    $('#divItems').show();
+				} else {
+                    $('#divItemsSelectedSubcategory').hide();
+                    $('#divItems').hide();
+				}
+            });
+
+            //Enhance itemsSelectedSubcategory-Selectbox with functions
+			$('#itemsSelectedSubcategory').on('change', function(){
+                itemsSelectedSubcategory = $('#itemsSelectedSubcategory').val();
+
+				if(itemsSelectedSubcategory > -1){
+                    //Fill Table
+					if(!categories[itemsSelectedCategory].subcategories[itemsSelectedSubcategory].items) {
+                        categories[itemsSelectedCategory].subcategories[itemsSelectedSubcategory].items = [];
+                    }
+                    values2table('tableItems', categories[itemsSelectedCategory].subcategories[itemsSelectedSubcategory].items, onChange, onTableItemsReady);
+                    
+					$('#divItems').show();
+				} else {
+					$('#divItems').hide();
+				}
+            });
+
+            //++++++++++ STATES ++++++++++
+			//Enhance statesSelectedCategory-Selectbox with functions
+			$('#statesSelectedCategory').on('change', function(){
+                statesSelectedCategory = $('#statesSelectedCategory').val();
+
+				if(statesSelectedCategory > -1){
+                    //Fill Subcategories and items
+                    if(!categories[statesSelectedCategory].subcategories) {
+                        categories[statesSelectedCategory].subcategories = [];
+                    }
+
+                    if(!categories[statesSelectedCategory].items) {
+                        categories[statesSelectedCategory].items = [];
+                    }
+
+                    if(categories[statesSelectedCategory].subcategories.length > 0) {
+                        statesSelectedSubcategory = -1;
+
+                        $('#statesSelectedSubcategory').empty().append("<option disabled selected value>Select subcategory</option>");
+                        categories[statesSelectedCategory].subcategories.forEach(function(element, index){
+                            $('#statesSelectedSubcategory').append("<option value='" + index + "'>" + element.name + "</option>"); 
+                        });
+                        $('select').select();
+
+                        $('#divStatesSelectedSubcategory').show();
+                    } else {
+                        $('#divStatesSelectedSubcategory').hide();
+                    }
+
+                    if(categories[statesSelectedCategory].items.length > 0) {
+                        statesSelectedItem = -1;
+
+                        $('#statesSelectedItem').empty().append("<option disabled selected value>Select Item</option>");
+                        categories[statesSelectedCategory].items.forEach(function(element, index){
+                            $('#statesSelectedItem').append("<option value='" + index + "'>" + element.name + "</option>"); 
+                        });
+                        $('select').select();
+
+                        $('#divStatesSelectedItem').show();
+                    } else {
+                        $('#divStatesSelectedItem').hide();
+                    }
+
+                    $('#divStates').hide();
+				} else {
+                    $('#divStatesSelectedSubcategory').hide();
+                    $('#divStatesSelectedItem').hide();
+                    $('#divStates').hide();
+				}
+            });
+
+            //Enhance statesSelectedSubcategory-Selectbox with functions
+			$('#statesSelectedSubcategory').on('change', function(){
+                statesSelectedSubcategory = $('#statesSelectedSubcategory').val();
+
+				if(statesSelectedSubcategory > -1){
+                    //Fill items
+                    if(!categories[statesSelectedCategory].subcategories[statesSelectedSubcategory].items) {
+                        categories[statesSelectedCategory].subcategories[statesSelectedSubcategory].items = [];
+                    }
+
+                    if(categories[statesSelectedCategory].subcategories[statesSelectedSubcategory].items.length > 0) {
+                        statesSelectedItem = -1;
+
+                        $('#statesSelectedItem').empty().append("<option disabled selected value>Select Item</option>");
+                        categories[statesSelectedCategory].subcategories[statesSelectedSubcategory].items.forEach(function(element, index){
+                            $('#statesSelectedItem').append("<option value='" + index + "'>" + element.name + "</option>"); 
+                        });
+                        $('select').select();
+
+                        $('#divStatesSelectedItem').show();
+                    } else {
+                        $('#divStatesSelectedItem').hide();
+                    }
+
+                    $('#divStates').hide();
+				} else {
+                    $('#divStatesSelectedItem').hide();
+                    $('#divStates').hide();
+				}
+            });
+
+            //Enhance statesSelectedItem-Selectbox with functions
+			$('#statesSelectedItem').on('change', function(){
+                statesSelectedItem = $('#statesSelectedItem').val();
+
+				if(statesSelectedItem > -1){
+                    //Fill Table
+                    if(statesSelectedSubcategory > -1){
+                        if(!categories[statesSelectedCategory].subcategories[statesSelectedSubcategory].items[statesSelectedItem].states) {
+                            categories[statesSelectedCategory].subcategories[statesSelectedSubcategory].items[statesSelectedItem].states = [];
+                        }
+                        values2table('tableStates', categories[statesSelectedCategory].subcategories[statesSelectedSubcategory].items[statesSelectedItem].states, onChange, onTableItemsReady);
+                    } else {
+                        if(!categories[statesSelectedCategory].items[statesSelectedItem].states) {
+                            categories[statesSelectedCategory].items[statesSelectedItem].states = [];
+                        }
+                        values2table('tableStates', categories[statesSelectedCategory].items[statesSelectedItem].states, onChange, onTableItemsReady);
+                    }
+                    
+					$('#divStates').show();
+				} else {
+					$('#divStates').hide();
+				}
+            });
+            
+            //Enhance TableDevices with functions
+			function onTableItemsReady(){
+				/*var $div = $('#tableDevices');
+				var $table = $div.find('.table-values');
+				var $lines = $table.find('.table-lines');
+				//Button-Functions
+				$lines.find('a[data-command]').each(function () {
+					var command = $(this).data('command');
+					//Edit Device
+					if (command === 'edit') {
+						$(this).on('click', function () {
+							var viewIndex = devicesSelectedView;
+							var deviceIndex = $(this).data('index');
+							initDialog('dialogDeviceEdit', function(){ //save dialog
+								var viewIndex =   $('#dialogDeviceEditViewIndex').val();
+								var deviceIndex = $('#dialogDeviceEditDeviceIndex').val();
+								views[viewIndex].devices[deviceIndex].commonRole = $('#dialogDeviceEditCommonRole').val();
+								views[viewIndex].devices[deviceIndex].states = dialogDeviceEditStatesTable;
+							});
+							$('#dialogDeviceEditCommonName').html(views[viewIndex].devices[deviceIndex].commonName || "");
+							$('#dialogDeviceEditViewIndex').val(viewIndex);
+							$('#dialogDeviceEditDeviceIndex').val(deviceIndex);
+							dialogDeviceEditStates = views[viewIndex].devices[deviceIndex].states || [];
+							dialogDeviceEditStatesTable = [];
+							if(views[viewIndex].devices[deviceIndex].commonRole) {
+								$('#dialogDeviceEditCommonRole').val(views[viewIndex].devices[deviceIndex].commonRole).trigger('change');
+							} else {
+								$('#dialogDeviceEditCommonRole').val(-1).trigger('change');
+							}
+							$('select').select()
+							$('#dialogDeviceEdit').modal('open');
+						});
+					}
+				});*/
+			}
+
+            //Show Settings
+			console.log("Loading settings done");
+			$('.hideOnLoad').show();
+            $('.showOnLoad').hide();
         }
 
         // ... and the function save has to exist.
         // you have to make sure the callback is called with the settings object as first param!
         function save(callback) {
-            // example: select elements with class=value and build settings object
+            //Select elements with class=value and build settings object
             var obj = {};
             $('.value').each(function () {
                 var $this = $(this);
@@ -63,7 +357,12 @@
                     obj[$this.attr('id')] = $this.val();
                 }
             });
-            callback(obj);
+
+            //Get edited subsettings
+			obj.categories = categories;
+            
+			//Save settings
+			callback(obj);
         }
     </script>
 
@@ -81,17 +380,254 @@
     <!-- you have to put your config page in a div with id adapter-container -->
     <div class="m adapter-container">
         <div class="row">
-            <!-- Forms are the standard way to receive user inputted data. Learn more http://materializecss.com/forms.html-->
+            <div class="input-field col s6">
+                <img src="homehub.png" class="logo">
+            </div>
+        </div>
+
+        <!-- ++++++++++ TABS ++++++++++ -->
+        <div class="col s12">
+            <ul class="tabs hideOnLoad" id="HomeHubTabs" style="display: none;">
+                <li class="tab col s2"><a href="#tabStart" class="translate active">Start</a></li>
+                <li class="tab col s2"><a href="#tabCategories" class="translate">Categories</a></li>
+                <li class="tab col s2"><a href="#tabSubcategories" class="translate">Subcategories</a></li>
+                <li class="tab col s2"><a href="#tabItems" class="translate">Items</a></li>
+                <li class="tab col s2"><a href="#tabStates" class="translate">States</a></li>
+                <li class="tab col s2"><a href="#tabResult" class="translate">Result</a></li>
+            </ul>
+        </div>
+
+        <!-- ++++++++++ TAB: Start ++++++++++ -->
+        <div id="tabStart" class="col s12 page">
             <div class="row">
-                <div class="input-field col s6">
-                    <img src="homehub.png" class="logo">
+                <div class="col s12">
+                    <h6 class="translate sub-title">Start</h6>
                 </div>
             </div>
-            <h6 class="translate sub-title">Configuration</h6>
+            <div class="row showOnLoad">
+                <div class="col s12">
+                    <p>Loading settings...</p>
+                </div>
+            </div>
+            <div class="row hideOnLoad" style="display: none;">
+                <div class="col s12">
+                    <p>
+                        Start setting up your interface by:
+                        <ol>
+                            <li>Creating categories<br>
+                                Categories are used for navigation.<br>
+                                <strong>Example:</strong> If your are living in a house, each floor could be setup as category.
+                            </li>
+                            <li>and subcategories.<br>
+                                Subcategories are used to group items within a category.<br>
+                                <strong>Example:</strong> If your ground floor consists of a bathroom, a kitchen and the living room, each room could be setup as subcategory.
+                            </li>
+                            <li>Then create items and states.<br>
+                                Items can be part of subcategories and each items shows one or more states.<br>
+                                <strong>Example:</strong> If your window in the living room is equipped with a shutter contact and a blind, setup "Window" as item and the states of the shutter contact and blind as states.
+                            </li>
+                        </ol>
+                    </p>
+                </div>
+            </div>
+            <!--<div class="row hideOnLoad" style="display: none;">
+                <div class="col s12">
+                    <br><br>
+                    <a class="waves-effect waves-light btn" id="mainLink" target="_blank"><i class="material-icons left">open_in_new</i>Open HomeHub</a>
+                </div>
+            </div>--->
+        </div>
+
+        <!-- ++++++++++ TAB: Categories ++++++++++ -->
+        <div id="tabCategories" class="col s12 page">
             <div class="row">
-                <div class="input-field col s12 m6">
-                    <textarea id="configuration" class="value materialize-textarea"></textarea>
-                    <label for="configuration" class="translate">JSON configuration</label>
+                <div class="col s12">
+                    <h6 class="translate sub-title">Categories</h6>
+                </div>
+            </div>
+            <div class="col s12" id="tableCategories">
+                <div class="row">
+                    <div class="col s2 m1 l1 center">
+                        <button title="Add" class="table-button-add btn-floating waves-effect waves-light btn-small">
+                            <i class=" material-icons">add</i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col s12 m12 l12">
+                    <table class="table-values" style="width: 90%;">
+                        <thead>
+                            <tr>
+                                <th data-name="name" class="translate">Name</th>
+                                <th data-name="icon" class="translate">Icon</th>
+                                <th data-name="appendDivider" data-type="checkbox" class="translate">Append divider</th>
+                                <th data-buttons="up down delete"></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ++++++++++ TAB: Subcategories ++++++++++ -->
+        <div id="tabSubcategories" class="col s12 page">
+            <div class="row">
+                <div class="col s12">
+                    <h6 class="translate sub-title">Select Category to edit</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s10 m6 l4">
+                    <select class="value" id="subcategoriesSelectedCategory"></select>
+                    <label for="subcategoriesSelectedCategory" class="translate">Category to edit</label>
+                </div>
+            </div>
+            <div id="divSubcategories">
+                <div class="row">
+                    <div class="col s12">
+                        <h6 class="translate sub-title">Subcategories</h6>
+                    </div>
+                </div>
+                <div class="col s12" id="tableSubcategories">
+                    <div class="row">
+                        <div class="col s2 m1 l1 center">
+                            <button title="Add" class="table-button-add btn-floating waves-effect waves-light btn-small">
+                                <i class=" material-icons">add</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col s12 m12 l12">
+                        <table class="table-values" style="width: 90%;">
+                            <thead>
+                                <tr>
+                                    <th data-name="name" class="translate">Name</th>
+                                    <th data-buttons="up down delete"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ++++++++++ TAB: Items ++++++++++ -->
+        <div id="tabItems" class="col s12 page">
+            <div class="row">
+                <div class="col s12">
+                    <h6 class="translate sub-title">Select Category to edit</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s10 m6 l4">
+                    <select class="value" id="itemsSelectedCategory"></select>
+                    <label for="itemsSelectedCategory" class="translate">Category to edit</label>
+                </div>
+            </div>
+            <div id="divItemsSelectedSubcategory">
+                <div class="row">
+                    <div class="input-field col s10 m6 l4">
+                        <select class="value" id="itemsSelectedSubcategory"></select>
+                        <label for="itemsSelectedSubcategory" class="translate">Subcategory to edit</label>
+                    </div>
+                </div>
+            </div>
+            <div id="divItems">
+                <div class="row">
+                    <div class="col s12">
+                        <h6 class="translate sub-title">Items</h6>
+                    </div>
+                </div>
+                <div class="col s12" id="tableItems">
+                    <div class="row">
+                        <div class="col s2 m1 l1 center">
+                            <button title="Add" class="table-button-add btn-floating waves-effect waves-light btn-small">
+                                <i class=" material-icons">add</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col s12 m12 l12">
+                        <table class="table-values" style="width: 90%;">
+                            <thead>
+                                <tr>
+                                    <th data-name="name" class="translate">Name</th>
+                                    <th data-name="icon" class="translate">Icon</th>
+                                    <th data-buttons="up down delete"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ++++++++++ TAB: States ++++++++++ -->
+        <div id="tabStates" class="col s12 page">
+                <div class="row">
+                    <div class="col s12">
+                        <h6 class="translate sub-title">Select Category to edit</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s10 m6 l4">
+                        <select class="value" id="statesSelectedCategory"></select>
+                        <label for="statesSelectedCategory" class="translate">Category to edit</label>
+                    </div>
+                </div>
+                <div id="divStatesSelectedSubcategory">
+                    <div class="row">
+                        <div class="input-field col s10 m6 l4">
+                            <select class="value" id="statesSelectedSubcategory"></select>
+                            <label for="statesSelectedSubcategory" class="translate">Subcategory to edit</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="divStatesSelectedItem">
+                        <div class="row">
+                            <div class="input-field col s10 m6 l4">
+                                <select class="value" id="statesSelectedItem"></select>
+                                <label for="statesSelectedItem" class="translate">Item to edit</label>
+                            </div>
+                        </div>
+                    </div>
+                <div id="divStates">
+                    <div class="row">
+                        <div class="col s12">
+                            <h6 class="translate sub-title">States</h6>
+                        </div>
+                    </div>
+                    <div class="col s12" id="tableStates">
+                        <div class="row">
+                            <div class="col s2 m1 l1 center">
+                                <button title="Add" class="table-button-add btn-floating waves-effect waves-light btn-small">
+                                    <i class=" material-icons">add</i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col s12 m12 l12">
+                            <table class="table-values" style="width: 90%;">
+                                <thead>
+                                    <tr>
+                                        <th data-name="id" class="translate">ID</th>
+                                        <th data-name="type" class="translate">Type</th>
+                                        <th data-name="readonly" data-type="checkbox" class="translate">Readonly</th>
+                                        <th data-buttons="up down delete"></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- ++++++++++ TAB: Result ++++++++++ -->
+        <div id="tabResult" class="col s12 page">
+            <div class="row">
+                <div class="col s12">
+                    <h6 class="translate sub-title">Result</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <pre id="result"></pre>
                 </div>
             </div>
         </div>
