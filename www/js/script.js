@@ -12,7 +12,7 @@ function initPage(_objects) {
     var i = 0;
     var e, html;
 
-    var sidebarTemplate = "<a id='nav{{id}}' href='#' class='{{#append_divider}}mb-3{{/append_divider}}'>{{name}}</a>";
+    var sidebarTemplate = "<a id='nav{{id}}' href='#' class='{{#appendDivider}}mb-3{{/appendDivider}}'>{{name}}</a>";
     var contentTemplate = `
     <div id='content{{id}}'>
         {{#subcategories}}
@@ -22,9 +22,9 @@ function initPage(_objects) {
                     <div class='hh d-flex'>
                         <div class='mr-auto'>{{name}}</div>
                         <div>
-                            {{#values}}
-                                <span class='info' style='display: none;'>{{prefix}}<span class='{{id}}'>t</span>{{suffix}}</span>
-                            {{/values}}                            
+                            {{#states}}
+                                <span class='info' style='display: none;'>{{prefix}}<span class='{{id}}'></span>{{suffix}}</span>
+                            {{/states}}                            
                         </div>
                     </div>
                 {{/items}}
@@ -34,9 +34,9 @@ function initPage(_objects) {
             <div class='hh d-flex'>
                 <div class='mr-auto'>{{name}}</div>
                 <div>
-                    {{#values}}
-                        <span class='info' style='display: none;'>{{prefix}}<span class='{{id}}'>t</span>{{suffix}}</span>
-                    {{/values}}                            
+                    {{#states}}
+                        <span class='info' style='display: none;'>{{prefix}}<span class='{{id}}'></span>{{suffix}}</span>
+                    {{/states}}                            
                 </div>
             </div>
         {{/items}}
@@ -82,6 +82,10 @@ function initPage(_objects) {
 function updateState(id, state) {
     if(id.includes('$') === true || id.includes('%') === true || state === null) {
         return;
+    }
+
+    if(id === 'hm-rpc.1.NEQ1833684.1.STATE') {
+        console.log(id + " --> " + JSON.stringify(state));
     }
 
     selector = '.' + id.replace(/\./gi, '\\.');

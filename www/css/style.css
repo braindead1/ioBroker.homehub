@@ -31,10 +31,17 @@ a:hover {
     text-decoration: none;
 }
 
+#loading {
+    width: 75%;
+    margin: 200px auto;
+    text-align: center;
+}
+
 #wrapper {
     width: 75%;
     min-width: 1200px;
     margin: 75px auto 5px;
+    display: none;
 }
 
 @media (max-width: 1200px) {
