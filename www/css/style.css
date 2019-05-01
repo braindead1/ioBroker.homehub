@@ -72,12 +72,9 @@ nav>a.selected {
 }
 
 nav>a>.icon{
+    width: 30px;
+    height: 30px;
     margin-right: 10px;
-}
-
-nav>.divider {
-    display: block;
-    height: 20px;
 }
 
 
@@ -105,12 +102,9 @@ nav>.divider {
 }
 
 .hh .icon {
+    width: 30px;
+    height: 30px;
     margin-right: 10px;
-}
-
-.divider {
-    display: block;
-    height: 20px;
 }
 
 fieldset {
