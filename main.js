@@ -19,15 +19,11 @@ adapter.on('ready', function () {
 function main() {
     var data = "var config = ";
 
-    if (adapter.config.configuration === undefined || adapter.config.configuration === '') {
+    if (adapter.config.categories === undefined || adapter.config.categories === '') {
         adapter.log.error('Configuration is missing');
 
         return;
     } else {
         adapter.log.info('Configuration found');
     }
-
-    data = data + adapter.config.configuration;
-
-    fs.writeFileSync(__dirname + "/www/config.js", data);
 }
