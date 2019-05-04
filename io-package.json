@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "homehub",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "news": {
+            "0.0.2": {
+                "en": "Build UI and show states",
+                "de": "UI erzeugen und Zustände anzeigen",
+                "ru": "Построить пользовательский интерфейс и показать состояния",
+                "pt": "Construir interface do usuário e mostrar estados",
+                "nl": "Bouw UI en show staten",
+                "fr": "Construire une interface utilisateur et afficher les états",
+                "it": "Crea interfaccia utente e mostra stati",
+                "es": "Construir UI y mostrar estados",
+                "pl": "Buduj interfejs użytkownika i pokazuj stany",
+                "zh-cn": "构建UI并显示状态"
+            },
             "0.0.1": {
                 "en": "initial release",
                 "de": "Erstveröffentlichung",
@@ -30,16 +42,16 @@
             "zh-cn": "HomeHub"
         },
         "desc": {
-            "en": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
-            "de": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
-            "ru": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
-            "pt": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
-            "nl": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
-            "fr": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
-            "it": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
-            "es": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
-            "pl": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker.",
-            "zh-cn": "This is a port of the HomeMatic HomeHub-WebUI for ioBroker."
+            "en": "Port of the HomeMatic HomeHub-WebUI for ioBroker",
+            "de": "Port der HomeMatic HomeHub-WebUI für ioBroker",
+            "ru": "Порт HomeMatic HomeHub-WebUI для ioBroker",
+            "pt": "Porta do HomeMatic HomeHub-WebUI para ioBroker",
+            "nl": "Poort van HomeMatic StartpaginaHub-WebUI voor ioBroker",
+            "fr": "Port de la HomeMatic HomeHub-WebUI pour ioBroker",
+            "it": "Port of the HomeMatic HomeHub-WebUI per ioBroker",
+            "es": "Puerto de HomeMatic HomeHub-WebUI para ioBroker",
+            "pl": "Port HomeMatic HomeHub-WebUI dla ioBroker",
+            "zh-cn": "用于ioBroker的HomeMatic HomeHub-WebUI的端口"
         },
         "authors": [
             "braindead1"
@@ -66,7 +78,8 @@
         "type": "visualization",
         "mode": "daemon",
         "dependencies": {
-            "web": ">=1.7.1"
+            "web": ">=1.7.1",
+            "icons-mfd-svg": ">=1.0.2"
         }
     },
     "native": {
