@@ -10,20 +10,28 @@
     <script type="text/javascript" src="js/conn.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="js/mustache-3.0.1.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.6.10.min.js"></script>
     <script type="text/javascript" src="js/script.js" charset="utf-8"></script>
+
+    <!-- Vue Pages and Components here -->
+    <script src='js/components/clock.vue.js'></script>
+    <script src='js/components/sidebar.vue.js'></script>
+    <script src='js/components/content.vue.js'></script>
+    <script src='js/components/item.vue.js'></script>
 </head>
 <body>
-    <header>
-        <span></span>
-        <span>HomeHub</span>
-        <span id="time"></span>
-    </header>
-    <div id="loading" class="translate">
-        Loading. Please wait...
-    </div>
-    <div id="wrapper" class="container">
-        <nav id="sidebar" class="offcanvas"></nav>
-        <div id="content" class="panel-group"></div>
+    <div id="app" v-cloak>
+        <header>
+            <span></span>
+            <span>HomeHub</span>
+            <homehub-clock></homehub-clock>
+        </header>
+        <div id="loading" class="translate">
+            Loading. Please wait...
+        </div>
+        <div id="wrapper" class="container">
+            <homehub-sidebar :config="config"></homehub-sidebar>
+            <homehub-content :config="config"></homehub-content>
+        </div>
     </div>
 </body>

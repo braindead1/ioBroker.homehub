@@ -19,7 +19,7 @@ connCallbacks = {
             console.log('connected');
 
             servConn.getObject('system.adapter.homehub.0', false, function (error, obj) {
-                console.log(JSON.stringify(obj));
+                //console.log(JSON.stringify(obj));
 
                 config['categories'] = obj['native']['categories']; 
                 
@@ -65,65 +65,24 @@ connCallbacks = {
 
 
 function initPage(_objects) {
-    var i = 0;
-    var e, html;
+    var app = new Vue({
+        el: '#app',
+        watch: {},
+        mounted() {},
+        data: {
+            config: config['categories']
+        },
+        methods: {}
+    });
 
-    var sidebarTemplate = "<a id='nav{{id}}' href='#' class='{{#appendDivider}}mb-3{{/appendDivider}}'>{{#icon}}<img class='icon' src='/icons-mfd-svg/{{icon}}' />{{/icon}}{{name}}</a>";
-    var contentTemplate = `
-    <div id='content{{id}}'>
-        {{#subcategories}}
-            <fieldset class='mb-4'>
-                <legend>{{name}}</legend>
-                {{#items}}
-                    <div class='hh d-flex'>
-                        <div class='mr-auto'>{{#icon}}<img class='icon' src='/icons-mfd-svg/{{icon}}' />{{/icon}}{{name}}</div>
-                        <div>
-                            {{#states}}
-                                <span class='info' style='display: none;'>{{prefix}}<span class='{{id}}'></span>{{suffix}}</span>
-                            {{/states}}                            
-                        </div>
-                    </div>
-                {{/items}}
-            </fieldset>
-        {{/subcategories}}
-        {{#items}}
-            <div class='hh d-flex'>
-                <div class='mr-auto'>{{#icon}}<img class='icon' src='/icons-mfd-svg/{{icon}}' />{{/icon}}{{name}}</div>
-                <div>
-                    {{#states}}
-                        <span class='info' style='display: none;'>{{prefix}}<span class='{{id}}'></span>{{suffix}}</span>
-                    {{/states}}                            
-                </div>
-            </div>
-        {{/items}}
-    </div>`;
+    $('#sidebar a').on("click", function() {
+        var id = $(this).attr('id').replace('nav', 'content');
 
-    // Seite aufbauen
-    config['categories'].forEach(element => {
-        i++;
-        
-        element['id'] = i;
-        
-        try {
-            html = Mustache.to_html(sidebarTemplate, element).replace(/^\s*/mg, '');
-            $('#sidebar').append(html);
+        $('#sidebar a').removeClass('selected');
+        $('#content>div').hide();
 
-            html = Mustache.to_html(contentTemplate, element).replace(/^\s*/mg, '');
-            $('#content').append(html);
-        } catch (_error) {
-            e = _error;
-            html = e.toString();
-        }
-
-        $('#sidebar a').on("click", function() {
-            var id = $(this).attr('id').replace('nav', 'content');
-
-            $('#sidebar a').removeClass('selected');
-            $('#content>div').hide();
-
-            $(this).addClass('selected');
-            $('#' + id).show();
-        });
+        $(this).addClass('selected');
+        $('#' + id).show();
     });
 
     $('#sidebar a').first().trigger('click');
@@ -146,12 +105,6 @@ function updateState(id, state) {
 
 // jQuery events
 $(document).ready(function () {
-    // Uhrzeit setzen
-    setInterval(function(){
-        date = new Date();
-        $('#time').html(('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ' Uhr');
-    }, 1000);
-
     // Websocket aufbauen
     servConn.init(connOptions, connCallbacks);
 });
