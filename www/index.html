@@ -3,16 +3,15 @@
 <head>
     <title>HomeHub</title>
 
-    <!-- Replace "localhost" with real IP address of controller, if default port changed, correct it too -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
     <script type="text/javascript" src="../../lib/js/socket.io.js"></script>
     <script type="text/javascript" src="js/conn.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/mustache-3.0.1.min.js"></script>
     <script type="text/javascript" src="js/script.js" charset="utf-8"></script>
-
-    <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
-    <link type="text/css" href="css/style.css" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -20,70 +19,11 @@
         <span>HomeHub</span>
         <span id="time"></span>
     </header>
-    <div id="loading">
+    <div id="loading" class="translate">
         Loading. Please wait...
     </div>
     <div id="wrapper" class="container">
         <nav id="sidebar" class="offcanvas"></nav>
         <div id="content" class="panel-group"></div>
     </div>
-
-    <!--
-        Check the browser console!
-    -->
-    <script type="text/javascript">
-        config = [];
-
-        servConn._useStorage = false;
-
-        var states = [];
-        servConn.init({
-            name:          'HomeHub',  // optional - default 'vis.0'
-            connLink:      'http://192.168.10.3:8084/',  // optional URL of the socket.io adapter
-            socketSession: ''           // optional - used by authentication
-        }, {
-            onConnChange: function (isConnected) {
-                if (isConnected) {
-                    console.log('connected');
-
-                    servConn.getObject('system.adapter.homehub.0', false, function (error, obj) {
-                        console.log(JSON.stringify(obj));
-
-                        config['categories'] = obj['native']['categories']; 
-                        
-                        initPage();
-                    });
-
-                    servConn.getStates(function (err, _states) {
-                        var count = 0;
-                        for (var id in _states) {
-                            count++;
-
-                            updateState(id, _states[id]);
-                        }
-                        console.log('Received ' + count + ' states.');
-                        states = _states;
-
-                        $('#loading').hide();
-                        $('#wrapper').show();
-                    });
-                } else {
-                    console.log('disconnected');
-                }
-            },
-            onRefresh: function () {
-                window.location.reload();
-            },
-            onUpdate: function (id, state) {
-                setTimeout(function () {
-                    states[id] = state;
-
-                    updateState(id, state);
-                }, 0);
-            },
-            onError: function (err) {
-                window.alert(_('Cannot execute %s for %s, because of insufficient permissions', err.command, err.arg), _('Insufficient permissions'), 'alert', 600);
-            }
-        });
-    </script>
 </body>
