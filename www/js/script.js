@@ -9,6 +9,7 @@ var config = {
 var connectionLink = location.origin;
 
 
+// Vuex
 const store = new Vuex.Store({
     state: config,
     /*mutations: {
@@ -35,22 +36,7 @@ connCallbacks = {
         if (isConnected) {
             console.log('connected');
 
-            servConn.getObject('system.adapter.homehub.0', false, function (error, obj) {
-                console.log('Received configuration.');
-
-                config['categories'] = obj['native']['categories']; 
-                
-                initPage();
-            });
-
-            servConn.getStates(function (err, _states) {
-                console.log('Received states.');
-
-                //store.commit('setStates', _states);
-                config['states'] = _states;
-
-                config.initiated = true;
-            });
+            initializeHomehub();
         } else {
             console.log('disconnected');
         }
@@ -68,26 +54,56 @@ connCallbacks = {
     }
 };
 
+function initializeHomehub(){
+    console.log('Initializing HomeHub');
 
+    // Reset everything
+    config['initiated'] = false;
+    config['categories'] = [];
+    config['states'] = [];
 
+    // Use callbacks to first fetch configuration and then states
+    fetchStates(
+        fetchConfiguration()
+    );
+}
 
+function fetchConfiguration(callback) {
+    console.log('Fetching configuration');
 
+    servConn.getObject('system.adapter.homehub.0', false, function (error, obj) {
+        console.log('Received configuration.');
 
+        config['categories'] = obj['native']['categories'];
 
-function initPage(_objects) {
-    var app = new Vue({
-        el: '#app',
-        store,
-        watch: {},
-        mounted() {},
-        data: {},
-        methods: {}
+        if(callback) callback();
+    });
+}
+
+function fetchStates(callback) {
+    console.log('Fetching states');
+
+    servConn.getStates(function (err, _states) {
+        console.log('Received states.');
+
+        //store.commit('setStates', _states);
+        config['states'] = _states;
+
+        config.initiated = true;
+
+        if(callback) callback();
     });
 }
 
 
 // jQuery events
 $(document).ready(function () {
-    // Websocket aufbauen
+    // Initialize Vue
+    var app = new Vue({
+        el: '#app',
+        store
+    });
+
+    // Initialize Websocket
     servConn.init(connOptions, connCallbacks);
 });
