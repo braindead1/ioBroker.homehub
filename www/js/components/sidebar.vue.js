@@ -10,10 +10,6 @@ Vue.component("homehub-sidebar", {
     </template>
   </nav>`,
   props: ["config"],
-  data() {
-    return {};
-  },
-  mounted() {},
   methods: {
     showContent: function(event){
       var id = $(event.target).attr('id').replace('nav', 'content');

@@ -5,14 +5,9 @@ Vue.component("homehub-header", {
     <homehub-clock></homehub-clock>
   </header>`,
   props: ["config"],
-  data() {
-    return {};
-  },
   computed: {
     title () {
       return store.state.title
     }
-  },
-  mounted() {},
-  methods: {}
+  }
 })

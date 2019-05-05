@@ -10,10 +10,5 @@ Vue.component("homehub-item", {
         <homehub-state v-for="(state, index) in item.states" :state="state"></homehub-state>
     </div>
   </div>`,
-  props: ["item"],
-  data() {
-    return {};
-  },
-  mounted() {},
-  methods: {}
+  props: ["item"]
 })

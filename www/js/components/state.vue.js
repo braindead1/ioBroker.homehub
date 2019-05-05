@@ -1,10 +1,6 @@
 Vue.component("homehub-state", {
   template: `<span class='info'>{{ getState(state.id) }}</span>`,
   props: ["state"],
-  data() {
-    return {};
-  },
-  mounted() {},
   methods: {
     getState: function(id) {
       var prefix = this.state.prefix !== undefined ? this.state.prefix : '';

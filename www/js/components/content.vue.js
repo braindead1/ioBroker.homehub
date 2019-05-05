@@ -12,11 +12,6 @@ Vue.component("homehub-content", {
             </div>
         </template>
     </div>`,
-    props: ["config"],
-    data() {
-      return {};
-    },
-    mounted() {},
-    methods: {}
+    props: ["config"]
   })
   
