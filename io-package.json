@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "homehub",
-        "version": "0.0.2",
+        "version": "0.0.3",
         "news": {
+            "0.0.3": {
+                "en": "Switch to Vue.js",
+                "de": "Wechseln Sie zu Vue.js",
+                "ru": "Переключиться на Vue.js",
+                "pt": "Mude para o Vue.js",
+                "nl": "Schakel over naar Vue.js",
+                "fr": "Basculer vers Vue.js",
+                "it": "Passa a Vue.js",
+                "es": "Cambiar a Vue.js",
+                "pl": "Przełącz się na Vue.js",
+                "zh-cn": "切换到Vue.js"
+            },
             "0.0.2": {
                 "en": "Build UI and show states",
                 "de": "UI erzeugen und Zustände anzeigen",

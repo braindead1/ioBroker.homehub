@@ -1,6 +1,6 @@
 {
   "name": "iobroker.homehub",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Port of the HomeMatic HomeHub-WebUI for ioBroker",
   "author": {
     "name": "braindead1"
