@@ -7,9 +7,7 @@ Vue.component("homehub-item", {
         {{ item.name }}
     </div>
     <div>
-        <template v-for="(state, index) in item.states">
-            <span class='info' style='display: none;'>{{ state.prefix }}<span :class="state.id"></span>{{ state.suffix }}</span>
-        </template>                           
+        <homehub-state v-for="(state, index) in item.states" :state="state"></homehub-state>
     </div>
   </div>`,
   props: ["item"],

@@ -1,8 +1,25 @@
 // Settings
+var config = {
+    'title': 'HomeHub',
+    'initiated': false,
+    'categories': [],
+    'states': []
+};
+
 var connectionLink = location.origin;
 
-var config = [];
-var states = [];
+
+const store = new Vuex.Store({
+    state: config,
+    /*mutations: {
+        setStates(state, _states) {
+            state.states = _states
+        },
+        updateState(state, payload) {
+            
+        }
+    }*/
+});
 
 
 // Websocket
@@ -19,7 +36,7 @@ connCallbacks = {
             console.log('connected');
 
             servConn.getObject('system.adapter.homehub.0', false, function (error, obj) {
-                //console.log(JSON.stringify(obj));
+                console.log('Received configuration.');
 
                 config['categories'] = obj['native']['categories']; 
                 
@@ -27,17 +44,12 @@ connCallbacks = {
             });
 
             servConn.getStates(function (err, _states) {
-                var count = 0;
-                for (var id in _states) {
-                    count++;
+                console.log('Received states.');
 
-                    updateState(id, _states[id]);
-                }
-                console.log('Received ' + count + ' states.');
-                states = _states;
+                //store.commit('setStates', _states);
+                config['states'] = _states;
 
-                $('#loading').hide();
-                $('#wrapper').show();
+                config.initiated = true;
             });
         } else {
             console.log('disconnected');
@@ -48,9 +60,7 @@ connCallbacks = {
     },
     onUpdate: function (id, state) {
         setTimeout(function () {
-            states[id] = state;
-
-            updateState(id, state);
+            config['states'][id] = state;
         }, 0);
     },
     onError: function (err) {
@@ -67,39 +77,12 @@ connCallbacks = {
 function initPage(_objects) {
     var app = new Vue({
         el: '#app',
+        store,
         watch: {},
         mounted() {},
-        data: {
-            config: config['categories']
-        },
+        data: {},
         methods: {}
     });
-
-    $('#sidebar a').on("click", function() {
-        var id = $(this).attr('id').replace('nav', 'content');
-
-        $('#sidebar a').removeClass('selected');
-        $('#content>div').hide();
-
-        $(this).addClass('selected');
-        $('#' + id).show();
-    });
-
-    $('#sidebar a').first().trigger('click');
-}
-
-function updateState(id, state) {
-    if(id.includes('$') === true || id.includes('%') === true || state === null) {
-        return;
-    }
-
-    selector = '.' + id.replace(/\./gi, '\\.');
-    value = state.val;
-    if (typeof value === "boolean"){
-        value = value.toString();
-    }
-
-    $(selector).html(value).parent().show();
 }
 
 

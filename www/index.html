@@ -11,27 +11,26 @@
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="js/vue-2.6.10.min.js"></script>
+    <script type="text/javascript" src="js/vuex-3.1.0.min.js"></script>
     <script type="text/javascript" src="js/script.js" charset="utf-8"></script>
 
     <!-- Vue Pages and Components here -->
     <script src='js/components/clock.vue.js'></script>
-    <script src='js/components/sidebar.vue.js'></script>
     <script src='js/components/content.vue.js'></script>
+    <script src='js/components/header.vue.js'></script>
     <script src='js/components/item.vue.js'></script>
+    <script src='js/components/state.vue.js'></script>
+    <script src='js/components/sidebar.vue.js'></script>
 </head>
 <body>
     <div id="app" v-cloak>
-        <header>
-            <span></span>
-            <span>HomeHub</span>
-            <homehub-clock></homehub-clock>
-        </header>
-        <div id="loading" class="translate">
+        <div v-show="!config.initiated" id="loading" class="translate">
             Loading. Please wait...
         </div>
-        <div id="wrapper" class="container">
-            <homehub-sidebar :config="config"></homehub-sidebar>
-            <homehub-content :config="config"></homehub-content>
+        <homehub-header v-show="config.initiated" :config="config"></homehub-header>
+        <div v-show="config.initiated" id="wrapper" class="container">
+            <homehub-sidebar :config="config.categories"></homehub-sidebar>
+            <homehub-content :config="config.categories"></homehub-content>
         </div>
     </div>
 </body>

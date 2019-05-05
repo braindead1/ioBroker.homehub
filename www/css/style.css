@@ -41,7 +41,6 @@ a:hover {
     width: 75%;
     min-width: 1200px;
     margin: 75px auto 5px;
-    display: none;
 }
 
 @media (max-width: 1200px) {

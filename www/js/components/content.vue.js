@@ -1,7 +1,7 @@
 Vue.component("homehub-content", {
     template: `<div id="content" class="panel-group">
         <template v-for="(category, index) in config">
-            <div :id="'content' + index">
+            <div :id="'content' + index" v-show="index === 0">
                 <template v-for="(subcategory, index) in category.subcategories">
                     <fieldset class='mb-4'>
                         <legend>{{subcategory.name}}</legend>
