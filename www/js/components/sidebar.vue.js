@@ -2,9 +2,7 @@ Vue.component("homehub-sidebar", {
   template: `<nav id="sidebar" class="offcanvas">
     <template v-for="(category, index) in config">
         <a :id="'nav' + index" href='#' v-bind:class="[category.appendDivider === true ? 'mb-3' : '', index === 0 ? 'selected' : '']" v-on:click="showContent($event)">
-          <template v-if="category.icon !== ''">
-            <img class='icon' :src="'/icons-mfd-svg/' + category.icon" />
-          </template>
+          <homehub-icon v-if="category.icon !== ''" :icon="category.icon"></homehub-icon>
           {{ category.name }}
         </a>
     </template>
