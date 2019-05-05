@@ -3,7 +3,9 @@ var config = {
     'title': 'HomeHub',
     'initiated': false,
     'categories': [],
-    'states': []
+    'objects': [],
+    'states': [],
+    'usedObjectIds': []
 };
 
 var connectionLink = location.origin;
@@ -11,15 +13,7 @@ var connectionLink = location.origin;
 
 // Vuex
 const store = new Vuex.Store({
-    state: config,
-    /*mutations: {
-        setStates(state, _states) {
-            state.states = _states
-        },
-        updateState(state, payload) {
-            
-        }
-    }*/
+    state: config
 });
 
 
@@ -60,15 +54,20 @@ function initializeHomehub(){
     // Reset everything
     config['initiated'] = false;
     config['categories'] = [];
+    config['objects'] = [];
     config['states'] = [];
 
     // Use callbacks to first fetch configuration and then states
     fetchStates(
-        fetchConfiguration()
+        fetchObjects(
+            fetchConfiguration()
+        )
     );
 }
 
 function fetchConfiguration(callback) {
+    callback = (typeof callback === 'function') ? callback : function() {};
+
     console.log('Fetching configuration');
 
     servConn.getObject('system.adapter.homehub.0', false, function (error, obj) {
@@ -76,22 +75,37 @@ function fetchConfiguration(callback) {
 
         config['categories'] = obj['native']['categories'];
 
-        if(callback) callback();
+        callback;
+    });
+}
+
+function fetchObjects(callback) {
+    callback = (typeof callback === 'function') ? callback : function() {};
+
+    console.log('Fetching objects');
+
+    servConn.getObjects(function (err, _objects) {
+        console.log('Received objects.');
+
+        config['objects'] = _objects;
+
+        callback;
     });
 }
 
 function fetchStates(callback) {
+    callback = (typeof callback === 'function') ? callback : function() {};
+
     console.log('Fetching states');
 
     servConn.getStates(function (err, _states) {
         console.log('Received states.');
 
-        //store.commit('setStates', _states);
         config['states'] = _states;
 
         config.initiated = true;
 
-        if(callback) callback();
+        callback;
     });
 }
 
