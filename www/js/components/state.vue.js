@@ -4,14 +4,23 @@ Vue.component("homehub-state", {
   methods: {
     getState: function(id) {
       var prefix = this.state.prefix !== undefined ? this.state.prefix : '';
-      var val = store.state.states[id] !== undefined ? store.state.states[id].val : '';
       var suffix = this.state.suffix !== undefined ? this.state.suffix : '';
+      var val = '';
+
+      if(id in store.state.objects) {
+        if("state" in store.state.objects[id]) {
+          if("val" in store.state.objects[id]["state"]) {
+            val = store.state.objects[id]["state"].val;
+          }          
+        }
+      }
 
       if(val !== '') {
-        return prefix + store.state.states[id].val + suffix;
+        return prefix + val + suffix;
       } else {
         return '';
       }
+      
     }
   }
 })

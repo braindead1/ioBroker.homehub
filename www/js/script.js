@@ -4,7 +4,6 @@ var config = {
     'initiated': false,
     'categories': [],
     'objects': [],
-    'states': [],
     'usedObjectIds': []
 };
 
@@ -40,7 +39,11 @@ connCallbacks = {
     },
     onUpdate: function (id, state) {
         setTimeout(function () {
-            config['states'][id] = state;
+            if(config['initiated'] === true) {
+                if(config['usedObjectIds'].includes(id)) {
+                    config['objects'][id]['state'] = state;
+                }
+            }
         }, 0);
     },
     onError: function (err) {
@@ -55,28 +58,13 @@ function initializeHomehub(){
     config['initiated'] = false;
     config['categories'] = [];
     config['objects'] = [];
-    config['states'] = [];
 
-    // Use callbacks to first fetch configuration and then states
-    fetchStates(
-        fetchObjects(
-            fetchConfiguration()
+    // Use callbacks to first fetch objects and then states
+    fetchObjects(
+        () => fetchStates(
+            () => initializeVue()
         )
     );
-}
-
-function fetchConfiguration(callback) {
-    callback = (typeof callback === 'function') ? callback : function() {};
-
-    console.log('Fetching configuration');
-
-    servConn.getObject('system.adapter.homehub.0', false, function (error, obj) {
-        console.log('Received configuration.');
-
-        config['categories'] = obj['native']['categories'];
-
-        callback;
-    });
 }
 
 function fetchObjects(callback) {
@@ -87,9 +75,51 @@ function fetchObjects(callback) {
     servConn.getObjects(function (err, _objects) {
         console.log('Received objects.');
 
-        config['objects'] = _objects;
+        if(_objects['system.adapter.homehub.0'] !== 'undefined') {
+            console.log('Received configuration.');
 
-        callback;
+            config['objects']['system.adapter.homehub.0'] = _objects['system.adapter.homehub.0'];
+
+            config['categories'] = _objects['system.adapter.homehub.0']['native']['categories'];
+
+            config['categories'].forEach(function(category, index) {
+                if(category['subcategories'] !== undefined) {
+                    category['subcategories'].forEach(function(subcategory, index) {
+                        if(subcategory['items'] !== undefined) {
+                            subcategory['items'].forEach(function(item, index) {
+                                if(item['states'] !== undefined) {
+                                    item['states'].forEach(function(state, index) {
+                                        if(state['id'] !== undefined) {
+                                            config['usedObjectIds'].push(state['id']);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+
+                if(category['items'] !== undefined) {
+                    category['items'].forEach(function(item, index) {
+                        if(item['states'] !== undefined) {
+                            item['states'].forEach(function(state, index) {
+                                if(state['id'] !== undefined) {
+                                    config['usedObjectIds'].push(state['id']);
+                                }
+                            });
+                        }
+                    });
+                };
+            });
+
+            for (key in _objects) {
+                if(config['usedObjectIds'].includes(key)) {
+                    config['objects'][key] = _objects[key];
+                }
+            }
+    
+            callback();
+        }
     });
 }
 
@@ -101,23 +131,31 @@ function fetchStates(callback) {
     servConn.getStates(function (err, _states) {
         console.log('Received states.');
 
-        config['states'] = _states;
+        for (key in _states) {
+            if(config['usedObjectIds'].includes(key)) {
+                config['objects'][key]['state'] = _states[key];
+            }
+        }
 
         config.initiated = true;
 
-        callback;
+        callback();
+    });
+}
+
+function initializeVue() {
+    console.log('Initializing Vue');
+
+    // Initialize Vue
+    var app = new Vue({
+        el: '#app',
+        store
     });
 }
 
 
 // jQuery events
 $(document).ready(function () {
-    // Initialize Vue
-    var app = new Vue({
-        el: '#app',
-        store
-    });
-
     // Initialize Websocket
     servConn.init(connOptions, connCallbacks);
 });
