@@ -18,16 +18,34 @@
     "type": "git",
     "url": "https://github.com/braindead1/ioBroker.homehub"
   },
-  "dependencies": {},
+  "dependencies": {
+    "axios": "^0.19.0",
+    "core-js": "^2.6.5",
+    "vue": "^2.6.10",
+    "vue-socket.io": "^3.0.7",
+    "vuex": "^3.0.1"
+  },
   "devDependencies": {
     "@types/gulp": "^4.0.6",
-    "axios": "^0.18.0",
+    "@vue/cli-plugin-babel": "^3.8.0",
+    "@vue/cli-plugin-eslint": "^3.8.0",
+    "@vue/cli-service": "^3.8.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
     "gulp": "^4.0.1",
-    "tslint": "^5.16.0"
+    "sass": "^1.18.0",
+    "sass-loader": "^7.1.0",
+    "tslint": "^5.16.0",
+    "vue-template-compiler": "^2.6.10"
   },
   "main": "main.js",
-  "scripts": {},
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
   "bugs": {
     "url": "https://github.com/braindead1/ioBroker.homehub/issues"
   },
