@@ -2,7 +2,7 @@
 .DS_Store
 node_modules
 /dist
-/www/*
+/www
 Thumbs.db
 nbproject
 
