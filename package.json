@@ -19,7 +19,7 @@
     "url": "https://github.com/braindead1/ioBroker.homehub"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
     "vue-socket.io": "^3.0.7",
